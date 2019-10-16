@@ -1,0 +1,24 @@
+{
+  "name": "GraylogSlackNotification",
+  "version": "3.1.0",
+  "description": "Send notifications to Slack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omise/graylog-plugin-slack-notification"
+  },
+  "scripts": {
+    "build": "webpack --bail"
+  },
+  "keywords": [
+    "graylog"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "graylog-web-plugin": "file:../graylog2-server/graylog2-web-interface/packages/graylog-web-plugin"
+  },
+  "resolutions": {
+    "upath": "1.1.2"
+  }
+}
