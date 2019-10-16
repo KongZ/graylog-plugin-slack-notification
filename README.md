@@ -10,7 +10,7 @@ Send notification messages to Slack when alert was raised.
 
 The screenshot below shows a sample of Slack notification.
 
-![](https://github.com/omise/graylog-plugin-slack-notification/blob/omise/screenshot_alert.png)
+![](https://raw.githubusercontent.com/omise/graylog-plugin-slack-notification/master/screenshot_acknowledged.png)
 
 * Send message directly to user or channel
 * Support Slack attachment short mode
@@ -24,7 +24,7 @@ The screenshot below shows a sample of Slack notification.
 
 The screenshot below shows a pre-formatted text with acknowledgement buttons
 
-![](https://github.com/omise/graylog-plugin-slack-notification/blob/omise/screenshot_preformat.png)
+![](https://raw.githubusercontent.com/omise/graylog-plugin-slack-notification/master/screenshot_preformat.png)
 
 #### Mention users or channels when alert
 This feature requires Slack Token. Slack API does not allow a webhook to mention users. To setup a Slack App, please see https://api.slack.com/slack-apps
@@ -34,11 +34,11 @@ The acknowledgment buttons also requires Slack Token. You cannot use Slack Incom
 
 The screenshot below shows an acknowledgement buttons
 
-![](https://github.com/omise/graylog-plugin-slack-notification/blob/omise/screenshot_acknowledgement.png)
+![](https://raw.githubusercontent.com/omise/graylog-plugin-slack-notification/master/screenshot_acknowledgement.png)
 
 The screenshot below shows a result of acknowledged
 
-![](https://github.com/omise/graylog-plugin-slack-notification/blob/omise/screenshot_acknowledged.png)
+![](https://raw.githubusercontent.com/omise/graylog-plugin-slack-notification/master/screenshot_acknowledged.png)
 
 
 ## Installation 
