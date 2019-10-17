@@ -172,7 +172,7 @@ class SlackNotificationForm extends React.Component {
           id="notification-shortMode"
           name="shortMode"
           label="Short Mode"
-          type="text"
+          type="checkbox"
           bsStyle={validation.errors.shortMode ? "error" : null}
           help={lodash.get(
             validation,
