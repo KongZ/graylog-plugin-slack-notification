@@ -179,7 +179,7 @@ class SlackNotificationForm extends React.Component {
             "errors.shortMode[0]",
             "Enable short mode? This strips down the Slack message to the bare minimum to take less space in the chat room."
           )}
-          value={config.shortMode || ""}
+          checked={config.shortMode || ""}
           onChange={this.handleChange}
         />
         <Input
@@ -193,7 +193,7 @@ class SlackNotificationForm extends React.Component {
             "errors.linkNames[0]",
             "Find and create links for channel names and user names."
           )}
-          value={config.linkNames || ""}
+          checked={config.linkNames || ""}
           onChange={this.handleChange}
         />
         <Input
@@ -291,7 +291,7 @@ class SlackNotificationForm extends React.Component {
             "errors.acknowledge[0]",
             "Include acknowledge buttons in alert message. This feature require either webhook URL from Slack app or Slack token. (Recommend Slack token)"
           )}
-          value={config.acknowledge || ""}
+          checked={config.acknowledge || ""}
           onChange={this.handleChange}
         />
         <Input
@@ -305,7 +305,7 @@ class SlackNotificationForm extends React.Component {
             "Use pre-formatted text",
             "Create a block of pre-formatted, fixed-width text on backlog items"
           )}
-          value={config.preformat || ""}
+          checked={config.preformat || ""}
           onChange={this.handleChange}
         />
       </React.Fragment>

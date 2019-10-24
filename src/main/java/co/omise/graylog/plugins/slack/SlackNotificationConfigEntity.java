@@ -38,7 +38,7 @@ public abstract class SlackNotificationConfigEntity implements EventNotification
 	@JsonProperty(SlackNotificationConfig.FIELD_SHORT_MODE)
 	public abstract ValueReference shortMode();
 
-	@JsonProperty(SlackNotificationConfig.FIELD_NOTIFY_USERS
+	@JsonProperty(SlackNotificationConfig.FIELD_NOTIFY_USERS)
 	public abstract ValueReference notifyUser();
 
 	@JsonProperty(SlackNotificationConfig.FIELD_LINK_NAMES)
