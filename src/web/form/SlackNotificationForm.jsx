@@ -77,7 +77,6 @@ class SlackNotificationForm extends React.Component {
           )}
           value={config.token || ""}
           onChange={this.handleChange}
-          required
        />
         <Input
           id="notification-userName"
