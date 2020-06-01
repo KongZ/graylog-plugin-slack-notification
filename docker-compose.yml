@@ -3,6 +3,8 @@ services:
   # MongoDB: https://hub.docker.com/_/mongo/
   mongodb:
     image: mongo:3
+    volumes: 
+      - ./data/mongodb:/data/db
   # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/6.x/docker.html
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
@@ -16,6 +18,8 @@ services:
         soft: -1
         hard: -1
     mem_limit: 1g
+    volumes: 
+      - ./data/es:/usr/share/elasticsearch/data
   # Graylog: https://hub.docker.com/r/graylog/graylog/
   graylog:
     image: graylog/graylog:3.1
@@ -33,7 +37,7 @@ services:
       - elasticsearch
     volumes:
       # Mount local plugin file into Docker container
-      - ./target/graylog-plugin-slack-notification-3.1.1.jar:/usr/share/graylog/plugin/graylog-plugin-slack-notification-3.1.1.jar
+      - ./target/graylog-plugin-slack-notification-3.1.4.jar:/usr/share/graylog/plugin/graylog-plugin-slack-notification-3.1.4.jar
     ports:
       # Graylog web interface and REST API
       - 9000:9000

@@ -76,7 +76,6 @@ public class SlackNotification implements EventNotification {
 		final boolean isAcknowledge = configuration.acknowledge();
 		final String graylogUri = configuration.graylogUrl();
 		final boolean isPreFormat = configuration.preformat();
-
 		// Create Message
 		SlackMessage message = new SlackMessage(buildMessage(ctx, configuration), configuration.channel(),
 				configuration.userName(), configuration.messageIcon(), configuration.linkNames());
@@ -231,8 +230,12 @@ public class SlackNotification implements EventNotification {
 
 	private List<Message> getAlarmBacklog(EventNotificationContext ctx, SlackNotificationConfig config) {
 		final List<MessageSummary> matchingMessages = notificationCallbackService.getBacklogForEvent(ctx);
-
-		return matchingMessages.stream().map(MessageSummary::getRawMessage).collect(Collectors.toList());
+		List<Message> messages = matchingMessages.stream().map(ms -> {
+			Message m = ms.getRawMessage();
+			m.addField("gl2_document_index", ms.getIndex());
+			return m;
+		}).collect(Collectors.toList());
+		return messages;
 	}
 
 }
