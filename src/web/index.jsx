@@ -1,11 +1,12 @@
+// eslint-disable-next-line no-unused-vars
+import webpackEntry from 'webpack-entry';
 import { PluginManifest, PluginStore } from 'graylog-web-plugin/plugin';
+import packageJson from '../../package.json';
 
 import SlackNotificationForm from 'form/SlackNotificationForm';
 import SlackNotificationSummary from 'form/SlackNotificationSummary';
 
-
-PluginStore.register(new PluginManifest({}, {
-
+const manifest = new PluginManifest(packageJson, {
   eventNotificationTypes: [
     {
       type: 'slack-notification-v1',
@@ -15,4 +16,5 @@ PluginStore.register(new PluginManifest({}, {
       defaultConfig: SlackNotificationForm.defaultConfig
     }
   ]
-}));
+});
+PluginStore.register(manifest);
