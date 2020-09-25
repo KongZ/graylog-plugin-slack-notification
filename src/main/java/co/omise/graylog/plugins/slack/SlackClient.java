@@ -108,7 +108,8 @@ public class SlackClient {
         } else {
           conn = (HttpURLConnection) url.openConnection();
         }
-        conn.setRequestMethod("GET");
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
       } catch (URISyntaxException | IOException e) {
         throw new SlackClientException("Could not open connection to Slack API", e);
