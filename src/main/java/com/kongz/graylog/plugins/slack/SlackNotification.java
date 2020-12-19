@@ -200,7 +200,18 @@ public class SlackNotification implements EventNotification {
 	 * @param attachment a Slack attachment object
 	 */
 	private void addField(Map<String, Object> fields, String fieldName, boolean shortMode, SlackMessage.Attachment attachment) {
-		Object value = fields.get(fieldName);
+		Object value = null;
+		try {
+			value = templateEngine.transform(fieldName, ImmutableMap.copyOf(fields)).trim();
+			if (fieldName.equals(value)) {
+				value = null;
+			}
+		} catch (Exception e) {
+			value = null;
+		}
+		if (value == null) {
+			value = fields.get(fieldName);
+		}
 		if (value != null) {
 			attachment.addField(new SlackMessage.AttachmentField(fieldName, value.toString(), shortMode));
 		}
