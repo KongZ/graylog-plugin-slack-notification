@@ -190,7 +190,7 @@ class SlackNotificationForm extends React.Component {
           help={lodash.get(
             validation,
             "errors.linkNames[0]",
-            "Find and create links for channel names and user names."
+            "Find and create links for channel names and user names. This option may requires Slack Token with `usergroups:read` and `users:read` permissions"
           )}
           checked={config.linkNames || ""}
           onChange={this.handleChange}
@@ -288,7 +288,7 @@ class SlackNotificationForm extends React.Component {
           help={lodash.get(
             validation,
             "errors.acknowledge[0]",
-            "Include acknowledge buttons in alert message. This feature require either webhook URL from Slack app or Slack token. (Recommend Slack token)"
+            "Include acknowledge buttons in alert message. This feature requires Slack token."
           )}
           checked={config.acknowledge || ""}
           onChange={this.handleChange}

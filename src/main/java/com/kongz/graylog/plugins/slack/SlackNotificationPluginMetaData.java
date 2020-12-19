@@ -1,4 +1,4 @@
-package co.omise.graylog.plugins.slack;
+package com.kongz.graylog.plugins.slack;
 
 import java.net.URI;
 import java.util.Collections;
@@ -9,7 +9,7 @@ import org.graylog2.plugin.ServerStatus;
 import org.graylog2.plugin.Version;
 
 public class SlackNotificationPluginMetaData implements PluginMetaData {
-	private static final String PLUGIN_PROPERTIES = "co.omise.graylog.plugins.slack/graylog-plugin.properties";
+	private static final String PLUGIN_PROPERTIES = "com.kongz.graylog.plugins.slack/graylog-plugin.properties";
 
 	@Override
 	public String getUniqueId() {
@@ -23,17 +23,17 @@ public class SlackNotificationPluginMetaData implements PluginMetaData {
 
 	@Override
 	public String getAuthor() {
-		return "Omise";
+		return "KongZ";
 	}
 
 	@Override
 	public URI getURL() {
-		return URI.create("https://github.com/omise/graylog-plugin-slack-notification");
+		return URI.create("https://github.com/KongZ/graylog-plugin-slack-notification");
 	}
 
 	@Override
 	public Version getVersion() {
-		return Version.fromPluginProperties(getClass(), PLUGIN_PROPERTIES, "version", Version.from(3, 1, 0, ""));
+		return Version.fromPluginProperties(getClass(), PLUGIN_PROPERTIES, "version", Version.from(3, 4, 0, ""));
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class SlackNotificationPluginMetaData implements PluginMetaData {
 
 	@Override
 	public Version getRequiredVersion() {
-		return Version.fromPluginProperties(getClass(), PLUGIN_PROPERTIES, "graylog.version", Version.from(3, 1, 0, ""));
+		return Version.fromPluginProperties(getClass(), PLUGIN_PROPERTIES, "graylog.version", Version.from(3, 4, 0, ""));
 	}
 
 	@Override

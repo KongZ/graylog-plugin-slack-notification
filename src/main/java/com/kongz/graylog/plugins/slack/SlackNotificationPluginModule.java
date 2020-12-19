@@ -1,4 +1,4 @@
-package co.omise.graylog.plugins.slack;
+package com.kongz.graylog.plugins.slack;
 
 import org.graylog2.plugin.PluginModule;
 

@@ -1,4 +1,4 @@
-package co.omise.graylog.plugins.slack;
+package com.kongz.graylog.plugins.slack;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -20,7 +20,7 @@ import org.graylog2.shared.rest.resources.RestResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import co.omise.graylog.plugins.slack.SlackMessage;
+import com.kongz.graylog.plugins.slack.SlackMessage;
 
 /**
  * Call by Slack when user click any buttons. You need to set this URL <code>

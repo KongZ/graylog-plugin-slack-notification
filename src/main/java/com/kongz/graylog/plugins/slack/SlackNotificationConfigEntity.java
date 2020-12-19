@@ -1,4 +1,4 @@
-package co.omise.graylog.plugins.slack;
+package com.kongz.graylog.plugins.slack;
 
 import java.util.Map;
 
@@ -157,7 +157,6 @@ public abstract class SlackNotificationConfigEntity implements EventNotification
 			.notifyUsers(channel().asString(parameters))
 			.shortMode(channel().asBoolean(parameters))
 			.linkNames(channel().asBoolean(parameters))
-			.messageIcon(channel().asString(parameters))
 			.messageIcon(channel().asString(parameters))
 			.footerText(channel().asString(parameters))
 			.footerIconUrl(channel().asString(parameters))

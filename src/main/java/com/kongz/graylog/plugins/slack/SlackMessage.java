@@ -1,4 +1,4 @@
-package co.omise.graylog.plugins.slack;
+package com.kongz.graylog.plugins.slack;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
@@ -90,7 +90,6 @@ public class SlackMessage {
     final Map<String, Object> params =
         new HashMap<String, Object>() {
           private static final long serialVersionUID = 5555331305145971889L;
-
           {
             put("channel", channel);
             put("text", text);
