@@ -14,7 +14,7 @@ The screenshot below shows a sample of Slack notification.
 
 * Send message directly to user or channel
 * Support Slack attachment short mode
-* Mention users or channels when alert. Users can be mentioned by field variables.
+* Mention users or channels when alert. Users can be mentioned by field variables
 * Provide link back to event times
 * Support event timestamp in footer text
 * Support proxy
@@ -66,6 +66,12 @@ Create a new Slack Incoming Webhook (`https://<organization>.slack.com/services/
 
 #### Step 2: Create Slack App (If you want to mention someone when send notifications to Slack or use interactive buttons)
 Create a new Slack App https://api.slack.com/apps?new_app=1 and copy the Slack Token into plugin configuration.
+
+The screenshot below shows a sample configuration screen.
+The sample here use extractor to extract and create fields for SSH login name (`ssh_login_from`) and IP (`ssh_login_ip`) from logs. 
+The configure Notify User to mention people who SSH to the server with Acknowledge button.
+
+![](https://raw.githubusercontent.com/KongZ/graylog-plugin-slack-notification/master/screenshot_configuration.png)
 
 ## Troubleshooting
 
