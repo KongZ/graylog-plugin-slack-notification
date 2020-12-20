@@ -1,8 +1,8 @@
 Slack Plugin for Graylog
 ========================
-
 This plugin is for Graylog 3.1 and above. If you are looking for older Graylog plugin, please checkout https://github.com/KongZ/graylog-plugin-slack
 
+Note: The plugin ownership was transferred from https://github.com/omise to https://github.com/KongZ
 ## Features
 
 ### Notification
@@ -21,13 +21,20 @@ The screenshot below shows a sample of Slack notification.
 * Support custom fields in Slack attachment
 * Support acknowledge buttons. Required Slack app's token
 * Support pre-formatted text in backlog item
+* Support event definition fields
+* Support JMTE in backlog fields and footer
 
 The screenshot below shows a pre-formatted text with acknowledgement buttons
 
 ![](https://raw.githubusercontent.com/KongZ/graylog-plugin-slack-notification/master/screenshot_preformat.png)
 
 #### Mention users or channels when alert
-This feature requires Slack Token. Slack API does not allow a webhook to mention users. To setup a Slack App, please see https://api.slack.com/slack-apps
+This feature requires Slack Token. The webhook does not allow to tag or mention users. 
+To setup a Slack App and get Token, please see https://api.slack.com/slack-apps
+You need the following permissions
+ - `users.list` for lookup Slack user ID from display name
+ - `chat.postMessage` for sending message
+
 
 #### Acknowledgment buttons
 The acknowledgment buttons also requires Slack Token. You cannot use Slack Incoming Webhook to creates buttons. See [Slack Interactive Message](https://api.slack.com/interactive-messages) for detail of Slack API.
@@ -53,7 +60,7 @@ is the `plugins/` folder relative from your `graylog-server` directory by defaul
 
 ### For Slack:
 
-#### Step 1: Create Slack Incoming Webhook
+#### Step 1: Create Slack Incoming Webhook (If you just want to send only message)
 
 Create a new Slack Incoming Webhook (`https://<organization>.slack.com/services/new/incoming-webhook`) and copy the URL it will present to you. It will ask you to select a Slack channel but you can override it in the plugin configuration later.
 
@@ -73,7 +80,7 @@ Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.Validator
 In this case, add the Slack SSL certificate manually to Java's trust store similar to the process described in the [Graylog documentation](http://docs.graylog.org/en/2.1/pages/configuration/https.html#adding-a-self-signed-certificate-to-the-jvm-trust-store).
 
 ### Error occurred when clicks a Slack button.
-Slack app required HTTPS connection between your Graylog server and Slack server. You need to configure your Graylog server with a valid certificate file. Make sure your Graylog server open a firewall allow Slack server to communicate with. 
+Slack App required HTTPS connection between your Graylog server and Slack server. You need to configure your Graylog server with a valid certificate file. Make sure your Graylog server open a firewall allow Slack server to communicate with. 
 
 Most common errors and describe will be send to you by Slack's bot when you click a button. If trouble persists, you can turn a `debug` log on Graylog server to see more detail on log files. 
 
