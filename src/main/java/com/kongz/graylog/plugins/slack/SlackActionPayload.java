@@ -1,11 +1,11 @@
-package co.omise.graylog.plugins.slack;
+package com.kongz.graylog.plugins.slack;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import co.omise.graylog.plugins.slack.SlackMessage;
+import com.kongz.graylog.plugins.slack.SlackMessage;
 
 import java.util.List;
 

@@ -1,1 +1,1 @@
-co.omise.graylog.plugins.slack.SlackNotificationPlugin
+com.kongz.graylog.plugins.slack.SlackNotificationPlugin

@@ -4,7 +4,7 @@
   "description": "Send notifications to Slack",
   "repository": {
     "type": "git",
-    "url": "https://github.com/omise/graylog-plugin-slack-notification"
+    "url": "https://github.com/KongZ/graylog-plugin-slack-notification"
   },
   "scripts": {
     "build": "webpack",

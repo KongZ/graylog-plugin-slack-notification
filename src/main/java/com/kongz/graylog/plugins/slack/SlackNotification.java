@@ -1,23 +1,30 @@
-package co.omise.graylog.plugins.slack;
+package com.kongz.graylog.plugins.slack;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.floreysoft.jmte.Engine;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import org.graylog.events.event.EventDto;
 import org.graylog.events.notifications.EventNotification;
 import org.graylog.events.notifications.EventNotificationContext;
 import org.graylog.events.notifications.EventNotificationService;
+import org.graylog.events.notifications.EventNotificationModelData;
 import org.graylog.events.notifications.PermanentEventNotificationException;
 import org.graylog.events.processor.EventDefinitionDto;
+import org.graylog2.jackson.TypeReferences;
 import org.graylog2.notifications.Notification;
 import org.graylog2.notifications.NotificationService;
 import org.graylog2.plugin.Message;
@@ -31,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SlackNotification implements EventNotification {
-	private static Logger logger = LoggerFactory.getLogger(SlackNotification.class);
+	private static Logger LOG = LoggerFactory.getLogger(SlackNotification.class);
 
 	public interface Factory extends EventNotification.Factory<SlackNotification> {
 		@Override
@@ -42,14 +49,18 @@ public class SlackNotification implements EventNotification {
 	private final StreamService streamService;
 	private final NotificationService notificationService;
 	private final NodeId nodeId;
+	private final Engine templateEngine;
+	private final ObjectMapper objectMapper;
 
 	@Inject
 	public SlackNotification(EventNotificationService notificationCallbackService, StreamService streamService,
-			NotificationService notificationService, NodeId nodeId) {
+			NotificationService notificationService, NodeId nodeId, Engine templateEngine, ObjectMapper objectMapper) {
 		this.notificationCallbackService = notificationCallbackService;
 		this.streamService = streamService;
 		this.notificationService = notificationService;
 		this.nodeId = nodeId;
+		this.templateEngine = templateEngine;
+		this.objectMapper = objectMapper;
 	}
 
 	@Override
@@ -72,7 +83,7 @@ public class SlackNotification implements EventNotification {
 		final String footerIconUrl = configuration.footerIconUrl();
 		final String footerText = configuration.footerText();
 		final String tsField = configuration.footerTsField();
-		final String customFields = configuration.fields();
+		final String customField = configuration.fields();
 		final boolean isAcknowledge = configuration.acknowledge();
 		final String graylogUri = configuration.graylogUrl();
 		final boolean isPreFormat = configuration.preformat();
@@ -89,18 +100,36 @@ public class SlackNotification implements EventNotification {
 				count = blSize;
 			}
 			boolean shortMode = configuration.shortMode();
-			final String[] fields;
-			if (!isNullOrEmpty(customFields)) {
-				fields = customFields.split(",");
+			final String[] customFields;
+			if (!isNullOrEmpty(customField)) {
+				customFields = customField.split(",");
 			} else {
-				fields = new String[0];
+				customFields = new String[0];
 			}
+			Map<String, Object> backlogFields = getBacklogsFields(ctx, count);
+			Map<String, Object> eventFields = java.util.stream.Stream.of(new Object[][] { 
+				{ "event_definition_id", backlogFields.get("event_definition_id") }, 
+				{ "event_definition_type", backlogFields.get("event_definition_type") }, 
+				{ "event_definition_title", backlogFields.get("event_definition_title") }, 
+				{ "event_definition_description", backlogFields.get("event_definition_description") }, 
+				{ "job_definition_id", backlogFields.get("job_definition_id") }, 
+				{ "job_trigger_id", backlogFields.get("job_trigger_id") }, 
+				{ "event", backlogFields.get("event") }, 
+		  }).collect(Collectors.toMap(data -> (String) data[0], data -> (Object) data[1]));
 			for (int i = 0; i < count; i++) {
 				Message backlogItem = backlogItems.get(i);
 				String footer = null;
 				Long ts = null;
+				Map<String, Object> fields = new HashMap<String, Object>();
+				fields.putAll(eventFields);
+				fields.putAll(backlogItem.getFields());
 				if (!isNullOrEmpty(footerText)) {
-					footer = StringReplacement.replace(footerText, backlogItem.getFields()).trim();
+					try {
+						footer = templateEngine.transform(footerText, ImmutableMap.copyOf(fields)).trim();
+					} catch (Exception e) {
+						footer = "Invalid footer template";
+					}
+					// footer = StringReplacement.replace(footerText, backlogItem.getFields()).trim();
 					if (!isNullOrEmpty(graylogUri))
 						footer = new StringBuilder("<").append(buildMessageLink(graylogUri, backlogItem)).append('|')
 								.append(footer).append('>').toString();
@@ -134,8 +163,8 @@ public class SlackNotification implements EventNotification {
 				if (isPreFormat)
 					attachment.setMarkdownIn("text");
 				// Add custom fields from backlog list
-				if (fields.length > 0) {
-					Arrays.stream(fields).map(String::trim).forEach(f -> addField(backlogItem, f, shortMode, attachment));
+				if (customFields.length > 0) {
+					Arrays.stream(customFields).map(String::trim).forEach(f -> addField(fields, f, shortMode, attachment));
 				}
 			}
 		}
@@ -163,6 +192,32 @@ public class SlackNotification implements EventNotification {
 	}
 
 	/**
+	 * Shortcut method to add a backlog field into Slack attachment.
+	 *
+	 * @param fields    fields
+	 * @param fieldName  field in backlog to be added
+	 * @param shortMode  true to use Slack attachment short mode
+	 * @param attachment a Slack attachment object
+	 */
+	private void addField(Map<String, Object> fields, String fieldName, boolean shortMode, SlackMessage.Attachment attachment) {
+		Object value = null;
+		try {
+			value = templateEngine.transform(fieldName, ImmutableMap.copyOf(fields)).trim();
+			if (fieldName.equals(value)) {
+				value = null;
+			}
+		} catch (Exception e) {
+			value = null;
+		}
+		if (value == null) {
+			value = fields.get(fieldName);
+		}
+		if (value != null) {
+			attachment.addField(new SlackMessage.AttachmentField(fieldName, value.toString(), shortMode));
+		}
+	}
+
+	/**
 	 * Create a slack <code>text</code> message from alert condition result.
 	 *
 	 * @param streams a Graylog stream
@@ -170,6 +225,7 @@ public class SlackNotification implements EventNotification {
 	 * @return a text to be used in Slack message
 	 */
 	private String buildMessage(EventNotificationContext ctx, SlackNotificationConfig configuration) {
+		final SlackClient client = new SlackClient(configuration);
 
 		String graylogUri = configuration.graylogUrl();
 		String notifyUsers = configuration.notifyUsers();
@@ -181,6 +237,22 @@ public class SlackNotification implements EventNotification {
 				for (MessageSummary messageSummary : messageList) {
 					notifyUsers = StringReplacement.replaceWithPrefix(notifyUsers, "@",
 							messageSummary.getRawMessage().getFields());
+				}
+				try {
+					if (notifyUsers.contains("@")) {
+						StringBuilder usersAsId = new StringBuilder();
+						String[] users = notifyUsers.split("@");
+						for (String user : users) {
+							user = user.trim();
+							if (!"".equals(user)) {
+								String id = client.getSlackUser(user);
+								usersAsId.append("<@").append(id).append(">").append(" ");
+							}
+						}
+						notifyUsers = usersAsId.toString();
+					}
+				} catch (SlackClient.SlackClientException e) {
+					LOG.error(e.getMessage(), e);
 				}
 			} else {
 				notifyUsers = StringReplacement.replace(notifyUsers, Collections.emptyMap());
@@ -199,14 +271,8 @@ public class SlackNotification implements EventNotification {
 		}
 		// Original Graylog message is too redundant. Try to make it short but it must
 		// compatible with all 3 Alerts type
-		// message.append(result.getResultDescription());
 		String eventName = ctx.eventDefinition().map(EventDefinitionDto::title).orElse("Unknown");
 		message.append(eventName);
-
-		// String description = result.getResultDescription();
-		// if (description != null) {
-		// message.append(description.replaceFirst("Stream", "").trim());
-		// }
 		return message.toString();
 	}
 
@@ -237,5 +303,15 @@ public class SlackNotification implements EventNotification {
 		}).collect(Collectors.toList());
 		return messages;
 	}
+
+	private Map<String, Object> getBacklogsFields(EventNotificationContext ctx, int backlogItemsCount) {
+		List<MessageSummary> backlog = notificationCallbackService.getBacklogForEvent(ctx);
+		if (backlogItemsCount > 0 && backlog != null) {
+			backlog = backlog.stream().limit(backlogItemsCount).collect(Collectors.toList());
+		}
+		EventNotificationModelData modelData = EventNotificationModelData.of(ctx, backlog);
+		Map<String, Object> objectMap = objectMapper.convertValue(modelData, TypeReferences.MAP_STRING_OBJECT);
+		return objectMap;
+  }
 
 }
