@@ -70,6 +70,10 @@ Create a new Slack Incoming Webhook (`https://<organization>.slack.com/services/
 
 #### Step 2: Create Slack App (If you want to mention someone when send notifications to Slack or use interactive buttons)
 Create a new Slack App https://api.slack.com/apps?new_app=1 and copy the Slack Token into plugin configuration.
+Set the User Token Scopes contains at least these permission `users.read`, `chat:write`.
+
+If you are requiring the Acknowledge button, set the interactive request URL to `https://{graylog.uri}/api/plugins/com.kongz.graylog.plugins.slack/action`
+### For Graylog:
 
 The screenshot below shows a sample configuration screen.
 The sample here use extractor to extract and create fields for SSH login name (`ssh_login_from`) and IP (`ssh_login_ip`) from logs. 
