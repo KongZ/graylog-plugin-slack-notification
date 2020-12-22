@@ -24,7 +24,7 @@ import com.kongz.graylog.plugins.slack.SlackMessage;
 
 /**
  * Call by Slack when user click any buttons. You need to set this URL <code>
- * https://{host}/api/plugins/org.graylog2.plugins.slack/action</code> in Slack's App Interactive
+ * https://{host}/api/plugins/com.kongz.graylog.plugins.slack/action</code> in Slack's App Interactive
  * Messages request URL.
  *
  * @author Siri C.

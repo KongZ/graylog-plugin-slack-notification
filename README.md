@@ -32,12 +32,16 @@ The screenshot below shows a pre-formatted text with acknowledgement buttons
 This feature requires Slack Token. The webhook does not allow to tag or mention users. 
 To setup a Slack App and get Token, please see https://api.slack.com/slack-apps
 You need the following permissions
- - `users.list` for lookup Slack user ID from display name
- - `chat.postMessage` for sending message
-
+ - `users.read` for lookup Slack user ID from display name
+ - `chat:write`,`chat:write:user`, `chat:write:bot` for sending message
 
 #### Acknowledgment buttons
 The acknowledgment buttons also requires Slack Token. You cannot use Slack Incoming Webhook to creates buttons. See [Slack Interactive Message](https://api.slack.com/interactive-messages) for detail of Slack API.
+
+The acknowledge button requires to set the interactive request URL to `https://{graylog.uri}/api/plugins/com.kongz.graylog.plugins.slack/action`
+Make sure you set the Action button to this URI correctly and no firewall blocking `POST` request
+
+![](https://raw.githubusercontent.com/KongZ/graylog-plugin-slack-notification/master/screenshot_slack_callback_url.png)
 
 The screenshot below shows an acknowledgement buttons
 
