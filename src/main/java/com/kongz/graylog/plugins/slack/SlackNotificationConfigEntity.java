@@ -18,7 +18,7 @@ import org.graylog2.contentpacks.model.entities.references.ValueReference;
 @JsonDeserialize(builder = SlackNotificationConfigEntity.Builder.class)
 public abstract class SlackNotificationConfigEntity implements EventNotificationConfigEntity {
 
-	public static final String TYPE_NAME = "slack-notification-v1";
+	public static final String TYPE_NAME = "com.kongz.graylog.plugins.slack";
 
 	@JsonProperty(SlackNotificationConfig.FIELD_WEBHOOK_URL)
 	public abstract ValueReference webhookUrl();

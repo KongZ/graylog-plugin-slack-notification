@@ -9,7 +9,7 @@ import SlackNotificationSummary from 'form/SlackNotificationSummary';
 const manifest = new PluginManifest(packageJson, {
   eventNotificationTypes: [
     {
-      type: 'slack-notification-v1',
+      type: 'com.kongz.graylog.plugins.slack',
       displayName: 'Slack Notification',
       formComponent: SlackNotificationForm,
       summaryComponent: SlackNotificationSummary,
