@@ -3,6 +3,19 @@ Slack Plugin for Graylog
 This plugin is for Graylog 3.1 and above. If you are looking for older Graylog plugin, please checkout https://github.com/KongZ/graylog-plugin-slack
 
 Note: The plugin ownership was transferred from https://github.com/omise to https://github.com/KongZ
+
+## Migration to 4.1
+Since Graylog 4.1 ships with a built-in Slack integration with same ID `slack-notification-v1` with this plugin. So I have decided to rename this plugin ID to `com.kongz.graylog.plugins.slack`
+
+You need to run the following command on Mongodb before install a new plugin in order to migrate current configuration to a new plugin version
+
+```
+graylog:PRIMARY> use graylog
+graylog:PRIMARY> db.auth('graylog', 'your-graylog-mongodb-password');
+graylog:PRIMARY> db.event_notifications.updateMany({"config.type":"slack-notification-v1"},{$set: { "config.type": "com.kongz.graylog.plugins.slack"}})
+
+```
+
 ## Features
 
 ### Notification
