@@ -22,7 +22,7 @@ import com.google.auto.value.AutoValue;
 @JsonTypeName(SlackNotificationConfig.TYPE_NAME)
 @JsonDeserialize(builder = SlackNotificationConfig.Builder.class)
 public abstract class SlackNotificationConfig implements EventNotificationConfig {
-	public static final String TYPE_NAME = "slack-notification-v1";
+	public static final String TYPE_NAME = "graylog-plugin-slack-notification";
 	public static final String FIELD_WEBHOOK_URL = "webhookUrl";
 	public static final String FIELD_CHANNEL = "channel";
 	public static final String FIELD_USER_NAME = "userName";
@@ -176,7 +176,13 @@ public abstract class SlackNotificationConfig implements EventNotificationConfig
 		@JsonProperty(FIELD_TOKEN)
 		public abstract SlackNotificationConfig.Builder token(String token);
 
-		public abstract SlackNotificationConfig build();
+		abstract SlackNotificationConfig autoBuild();
+
+		public SlackNotificationConfig build() {
+			// Make sure the type name is correct!
+			type(TYPE_NAME);
+			return autoBuild();
+		}
 	}
 
 	@Override
