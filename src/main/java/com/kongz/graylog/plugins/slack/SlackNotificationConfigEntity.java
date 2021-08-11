@@ -18,7 +18,7 @@ import org.graylog2.contentpacks.model.entities.references.ValueReference;
 @JsonDeserialize(builder = SlackNotificationConfigEntity.Builder.class)
 public abstract class SlackNotificationConfigEntity implements EventNotificationConfigEntity {
 
-	public static final String TYPE_NAME = "slack-notification-v1";
+	public static final String TYPE_NAME = "graylog-plugin-slack-notification";
 
 	@JsonProperty(SlackNotificationConfig.FIELD_WEBHOOK_URL)
 	public abstract ValueReference webhookUrl();
@@ -142,7 +142,13 @@ public abstract class SlackNotificationConfigEntity implements EventNotification
 		@JsonProperty(SlackNotificationConfig.FIELD_TOKEN)
 		public abstract Builder token(ValueReference token);
 
-		public abstract SlackNotificationConfigEntity build();
+		abstract SlackNotificationConfigEntity autoBuild();
+
+		public SlackNotificationConfigEntity build() {
+			// Make sure the type name is correct!
+			type(TYPE_NAME);
+			return autoBuild();
+		}
 	}
 
 	@Override

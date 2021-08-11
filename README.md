@@ -5,15 +5,19 @@ This plugin is for Graylog 3.1 and above. If you are looking for older Graylog p
 Note: The plugin ownership was transferred from https://github.com/omise to https://github.com/KongZ
 
 ## Migration to 4.1
-Since Graylog 4.1 ships with a built-in Slack integration with same ID `slack-notification-v1` with this plugin. So I have decided to rename this plugin ID to `com.kongz.graylog.plugins.slack`
+Since Graylog 4.1 was released with a built-in Slack integration with same ID `slack-notification-v1` with this plugin. So I have decided to rename this plugin ID to `graylog-plugin-slack-notification`
 
-You need to run the following command on Mongodb before install a new plugin in order to migrate current configuration to a new plugin version
+The error showing on Graylog 4.1 when you installing the plugin
+```
+1) [Guice/DuplicateMapKey]: Duplicate key "slack-notification-v1" found in Map<String, EventNotification$Factory>.
+```
+
+You need to run the following command on Mongodb before installing a new plugin in order to migrate current configuration to a new plugin version
 
 ```
 graylog:PRIMARY> use graylog
 graylog:PRIMARY> db.auth('graylog', 'your-graylog-mongodb-password');
-graylog:PRIMARY> db.event_notifications.updateMany({"config.type":"slack-notification-v1"},{$set: { "config.type": "com.kongz.graylog.plugins.slack"}})
-
+graylog:PRIMARY> db.event_notifications.updateMany({"config.type":"slack-notification-v1"},{$set: { "config.type": "graylog-plugin-slack-notification"}})
 ```
 
 ## Features
