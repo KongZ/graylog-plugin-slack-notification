@@ -8,13 +8,13 @@
     <parent>
         <groupId>org.graylog.plugins</groupId>
         <artifactId>graylog-plugin-web-parent</artifactId>
-        <version>4.1.0</version>
-        <relativePath>../graylog2-server/graylog-plugin-parent/graylog-plugin-web-parent</relativePath>
+        <version>4.2.5</version>
+        <!-- <relativePath>../graylog2-server/graylog-plugin-parent/graylog-plugin-web-parent</relativePath> -->
     </parent>
 
     <groupId>com.kongz</groupId>
     <artifactId>graylog-plugin-slack-notification</artifactId>
-    <version>4.1.0</version>
+    <version>4.2.5</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
@@ -40,7 +40,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven.site.skip>true</maven.site.skip>
 
-        <graylog.version>4.1.0</graylog.version>
+        <graylog.version>4.2.5</graylog.version>
         <auto-value.version>1.6.2</auto-value.version>
         <generatedSources>${project.build.directory}/generated-sources/java</generatedSources>
     </properties>
@@ -107,7 +107,9 @@
 
     <build>
         <resources>
-            <resource><directory>${web.build-dir}</directory></resource>
+            <resource>
+                <directory>${web.build-dir}</directory>
+            </resource>
             <resource>
               <directory>src/main/resources</directory>
               <filtering>true</filtering>
@@ -192,7 +194,18 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.1</version>
                 <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
                     <minimizeJar>false</minimizeJar>
+                    <artifactSet>
+                        <excludes>
+                            <exclude>com.google.guava:guava</exclude>
+                            <exclude>com.fasterxml.jackson.core:*</exclude>
+                            <exclude>org.apache.httpcomponents:httpclient</exclude>
+                            <exclude>joda-time:joda-time</exclude>
+                            <exclude>commons-codec:commons-codec</exclude>
+                            <exclude>com.google.protobuf:protobuf-java</exclude>
+                        </excludes>
+                    </artifactSet>
                 </configuration>
                 <executions>
                     <execution>
@@ -299,8 +312,8 @@
                                     <goal>install-node-and-yarn</goal>
                                 </goals>
                                 <configuration>
-                                    <nodeVersion>${nodejs.version}</nodeVersion>
-                                    <yarnVersion>${yarn.version}</yarnVersion>
+                                    <nodeVersion>v16.13.2</nodeVersion>
+                                    <yarnVersion>v1.22.5</yarnVersion>
                                 </configuration>
                             </execution>
 

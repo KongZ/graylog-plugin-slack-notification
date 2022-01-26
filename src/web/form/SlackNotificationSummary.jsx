@@ -91,7 +91,6 @@ class SlackNotificationSummary extends React.Component {
             <td>Use pre-formatted text</td>
             <td>{notification.config.preformat}</td>
           </tr>
-
         </React.Fragment>
       </CommonNotificationSummary>
     );

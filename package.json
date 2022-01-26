@@ -1,23 +1,37 @@
 {
-  "name": "GraylogSlackNotification",
-  "version": "3.3.4",
+  "name": "graylog-plugin-slack-notification",
+  "version": "4.2.5",
   "description": "Send notifications to Slack",
   "repository": {
     "type": "git",
     "url": "https://github.com/KongZ/graylog-plugin-slack-notification"
   },
   "scripts": {
-    "build": "webpack",
-    "lint": "eslint -c .eslintrc src/**/*",
-    "test": "jest"
+    "build": "webpack --bail",
+    "lint": "eslint -c .eslintrc src/**/*"
   },
   "keywords": [
     "graylog"
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "graylog-web-plugin": "file:../graylog2-server/graylog2-web-interface/packages/graylog-web-plugin"
   },
   "devDependencies": {
-    "graylog-web-plugin": "file:../graylog2-server/graylog2-web-interface/packages/graylog-web-plugin"
-  }
+    "@babel/core": "^7.16.12",
+    "@babel/plugin-proposal-class-properties": "7.13.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/plugin-transform-runtime": "7.11.5",
+    "@babel/preset-env": "7.13.10",
+    "@babel/preset-react": "7.12.13",
+    "@testing-library/user-event": "^13.0.2",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^27.4.6",
+    "babel-plugin-add-module-exports": "1.0.4",
+    "babel-plugin-dynamic-import-node": "2.3.3",
+    "babel-plugin-styled-components": "1.11.1",
+    "identity-obj-proxy": "^3.0.0",
+    "regenerator-runtime": "^0.13.9"
+  },
+  "private": true
 }

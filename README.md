@@ -20,6 +20,17 @@ graylog:PRIMARY> db.auth('graylog', 'your-graylog-mongodb-password');
 graylog:PRIMARY> db.event_notifications.updateMany({"config.type":"slack-notification-v1"},{$set: { "config.type": "graylog-plugin-slack-notification"}})
 ```
 
+## Version Compatibility
+
+| Plugin Version                                         | Graylog Version |
+|--------------------------------------------------------|-----------------|
+| 4.2.x                                                  | 4.2.x           |
+| 4.1.x                                                  | 4.1.x           |
+| 4.0.x                                                  | 4.0.x           |
+| 3.3.x                                                  | 3.3.x           |
+| 3.1.x                                                  | 3.1.x           |
+| [2.x.x](https://github.com/KongZ/graylog-plugin-slack) | 2.x.x           |
+
 ## Features
 
 ### Notification

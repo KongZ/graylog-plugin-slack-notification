@@ -18,7 +18,7 @@ public class SlackNotificationPluginMetaData implements PluginMetaData {
 
 	@Override
 	public String getName() {
-		return "Slack Notification Plugin";
+		return "Graylog Slack Notification Plugin";
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class SlackNotificationPluginMetaData implements PluginMetaData {
 
 	@Override
 	public Version getVersion() {
-		return Version.fromPluginProperties(getClass(), PLUGIN_PROPERTIES, "version", Version.from(3, 4, 0, ""));
+		return Version.fromPluginProperties(getClass(), PLUGIN_PROPERTIES, "version", Version.from(4, 2, 0, ""));
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class SlackNotificationPluginMetaData implements PluginMetaData {
 
 	@Override
 	public Version getRequiredVersion() {
-		return Version.fromPluginProperties(getClass(), PLUGIN_PROPERTIES, "graylog.version", Version.from(3, 4, 0, ""));
+		return Version.fromPluginProperties(getClass(), PLUGIN_PROPERTIES, "graylog.version", Version.from(4, 2, 0, ""));
 	}
 
 	@Override

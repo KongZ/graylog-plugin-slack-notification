@@ -22,7 +22,9 @@ import org.graylog.events.notifications.EventNotification;
 import org.graylog.events.notifications.EventNotificationContext;
 import org.graylog.events.notifications.EventNotificationService;
 import org.graylog.events.notifications.EventNotificationModelData;
+import org.graylog.events.notifications.EventNotificationException;
 import org.graylog.events.notifications.PermanentEventNotificationException;
+import org.graylog.events.notifications.TemporaryEventNotificationException;
 import org.graylog.events.processor.EventDefinitionDto;
 import org.graylog2.jackson.TypeReferences;
 import org.graylog2.notifications.Notification;
@@ -64,19 +66,28 @@ public class SlackNotification implements EventNotification {
 	}
 
 	@Override
-	public void execute(EventNotificationContext ctx) throws PermanentEventNotificationException {
+	public void execute(EventNotificationContext ctx) throws EventNotificationException {
 		try {
 			send(ctx);
-		} catch (Exception e) {
-			final Notification systemNotification = notificationService.buildNow().addNode(nodeId.toString())
-					.addType(Notification.Type.GENERIC).addSeverity(Notification.Severity.NORMAL)
-					.addDetail("errors", e.getMessage());
+		} catch (TemporaryEventNotificationException e) {
+			//scheduler needs to retry a TemporaryEventNotificationException
+			throw e;
+		}	catch (PermanentEventNotificationException e) {
+			String errorMessage = String.format("Error sending the SlackNotification. %s", e.getMessage());
+			final Notification systemNotification = notificationService.buildNow()
+						.addNode(nodeId.toString())
+						.addType(Notification.Type.GENERIC)
+						.addSeverity(Notification.Severity.URGENT)
+						.addDetail("title", "SlackNotification Failed")
+						.addDetail("description", errorMessage);
 			notificationService.publishIfFirst(systemNotification);
-			throw new PermanentEventNotificationException(e.getMessage(), e);
+			throw e;
+		} catch (Exception e) {
+			throw new EventNotificationException("There was an exception triggering the SlackNotification", e);
 		}
 	}
 
-	private void send(EventNotificationContext ctx) {
+	private void send(EventNotificationContext ctx) throws EventNotificationException{
 		final SlackNotificationConfig configuration = (SlackNotificationConfig) ctx.notificationConfig();
 		final SlackClient client = new SlackClient(configuration);
 		final String color = configuration.color();
@@ -92,7 +103,7 @@ public class SlackNotification implements EventNotification {
 				configuration.userName(), configuration.messageIcon(), configuration.linkNames());
 
 		// Create Attachment for Backlog and Fields section
-		final List<Message> backlogItems = getAlarmBacklog(ctx, configuration);
+		final List<Message> backlogItems = getAlarmBacklog(ctx);
 		int count = configuration.backlogItems();
 		if (count > 0) {
 			final int blSize = backlogItems.size();
@@ -129,7 +140,6 @@ public class SlackNotification implements EventNotification {
 					} catch (Exception e) {
 						footer = "Invalid footer template";
 					}
-					// footer = StringReplacement.replace(footerText, backlogItem.getFields()).trim();
 					if (!isNullOrEmpty(graylogUri))
 						footer = new StringBuilder("<").append(buildMessageLink(graylogUri, backlogItem)).append('|')
 								.append(footer).append('>').toString();
@@ -172,7 +182,7 @@ public class SlackNotification implements EventNotification {
 		try {
 			client.send(message);
 		} catch (SlackClient.SlackClientException e) {
-			throw new RuntimeException("Could not send message to Slack.", e);
+			throw new EventNotificationException("Could not send message to Slack.", e);
 		}
 	}
 
@@ -233,7 +243,7 @@ public class SlackNotification implements EventNotification {
 		StringBuilder message = new StringBuilder();
 		if (!isNullOrEmpty(notifyUsers)) {
 			List<MessageSummary> messageList = notificationCallbackService.getBacklogForEvent(ctx);
-			if (messageList.size() > 0) {
+			if (!messageList.isEmpty()) {
 				for (MessageSummary messageSummary : messageList) {
 					notifyUsers = StringReplacement.replaceWithPrefix(notifyUsers, "@",
 							messageSummary.getRawMessage().getFields());
@@ -294,14 +304,13 @@ public class SlackNotification implements EventNotification {
 				.toString();
 	}
 
-	private List<Message> getAlarmBacklog(EventNotificationContext ctx, SlackNotificationConfig config) {
+	private List<Message> getAlarmBacklog(EventNotificationContext ctx) {
 		final List<MessageSummary> matchingMessages = notificationCallbackService.getBacklogForEvent(ctx);
-		List<Message> messages = matchingMessages.stream().map(ms -> {
+		return matchingMessages.stream().map(ms -> {
 			Message m = ms.getRawMessage();
 			m.addField("gl2_document_index", ms.getIndex());
 			return m;
 		}).collect(Collectors.toList());
-		return messages;
 	}
 
 	private Map<String, Object> getBacklogsFields(EventNotificationContext ctx, int backlogItemsCount) {
