@@ -19,8 +19,8 @@ import org.graylog2.plugin.rest.PluginRestResource;
 import org.graylog2.shared.rest.resources.RestResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.kongz.graylog.plugins.slack.SlackMessage;
+import org.graylog2.audit.AuditEventTypes;
+import org.graylog2.audit.jersey.AuditEvent;
 
 /**
  * Call by Slack when user click any buttons. You need to set this URL <code>
@@ -43,6 +43,7 @@ public class SlackActionCallback extends RestResource implements PluginRestResou
   @POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  @AuditEvent(type = AuditEventTypes.ALARM_CALLBACK_UPDATE)
   public Response slackAction(@FormParam("payload") String payload) {
     try {
       if (LOG.isTraceEnabled()) LOG.trace("{}", payload);

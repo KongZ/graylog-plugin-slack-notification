@@ -47,7 +47,6 @@ class SlackNotificationForm extends React.Component {
 
   render() {
     const { config, validation } = this.props;
-
     return (
       <React.Fragment>
         <Input
@@ -77,7 +76,7 @@ class SlackNotificationForm extends React.Component {
           )}
           value={config.token || ""}
           onChange={this.handleChange}
-       />
+        />
         <Input
           id="notification-userName"
           name="userName"
