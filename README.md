@@ -60,9 +60,13 @@ The screenshot below shows a pre-formatted text with acknowledgement buttons
 This feature requires Slack Token. The webhook does not allow to tag or mention users. 
 To setup a Slack App and get Token, please see https://api.slack.com/slack-apps
 You need the following permissions
- - `users.list` for lookup Slack user ID from display name
- - `chat.postMessage` for sending message
-
+If you are using Slack Bot Token. Token starts with `xoxb`
+ - `users:read` for lookup Slack user ID from display name
+ - `chat:write` for sending message
+If you are using Slack User Token. Token starts with `xoxp`
+ - `users:read` for lookup Slack user ID from display name
+ - `chat:write`, `chat.write:user`, `chat:write:bot` for sending message
+ - `chat:write.customize` for setting sender name and icon
 
 #### Acknowledgment buttons
 The acknowledgment buttons also requires Slack Token. You cannot use Slack Incoming Webhook to creates buttons. See [Slack Interactive Message](https://api.slack.com/interactive-messages) for detail of Slack API.
