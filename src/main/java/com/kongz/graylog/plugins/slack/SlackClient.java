@@ -62,7 +62,7 @@ public class SlackClient {
       }
       conn.setDoOutput(true);
       conn.setRequestMethod("POST");
-      conn.setRequestProperty("Content-Type", "application/json");
+      conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
       if (!isNullOrEmpty(slackToken)) {
         conn.setRequestProperty("Authorization", "Bearer " + slackToken);
       }
