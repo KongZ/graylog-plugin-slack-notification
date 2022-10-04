@@ -14,5 +14,8 @@ public class SlackUserList {
    
    @JsonProperty("members")
    public List<SlackMember> members = null;
+   
+   @JsonProperty("response_metadata")
+   public SlackResponseMetadata responseMetadata = null;
 
 }

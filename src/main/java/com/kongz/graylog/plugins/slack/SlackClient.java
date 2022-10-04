@@ -48,7 +48,7 @@ public class SlackClient {
     this.slackToken = configuration.token();
   }
 
-  private String postSlackApi(URL url, String payload) throws SlackClientException {
+  private String postSlackApi(URL url, Object payload) throws SlackClientException {
     HttpURLConnection conn = null;
     try {
       if (!StringUtils.isEmpty(proxyURL)) {
@@ -70,8 +70,10 @@ public class SlackClient {
       throw new SlackClientException("Could not open connection to Slack API", e);
     }
     try (final Writer writer = new OutputStreamWriter(conn.getOutputStream(), Charsets.UTF_8)) {
-      if (LOG.isTraceEnabled()) LOG.trace("{}", payload);
-      writer.write(payload);
+      String jsonPayload = objectMapper.writeValueAsString(payload);
+      if (LOG.isTraceEnabled()) 
+        LOG.trace("{}", jsonPayload);
+      writer.write(jsonPayload);
       writer.flush();
     } catch (IOException e) {
       throw new SlackClientException("Could not POST to Slack API", e);
@@ -97,18 +99,22 @@ public class SlackClient {
     }
     String id = slackUserCache.getIfPresent(key);
     if (id == null) {
-      try {
-        String response = postSlackApi(new URL("https://slack.com/api/users.list"), "");
-        SlackUserList userList = objectMapper.readValue(response, SlackUserList.class);
-        for (SlackMember member : userList.members) {
-          if (!member.isBot) {
-            slackUserCache.put(member.profile.displayName, member.id);
+      SlackCursorPayload cursorPayload = new SlackCursorPayload(200, "");
+      do {
+        try {
+          String response = postSlackApi(new URL("https://slack.com/api/users.list"), cursorPayload);
+          SlackUserList userList = objectMapper.readValue(response, SlackUserList.class);
+          for (SlackMember member : userList.members) {
+            if (!member.isBot) {
+              slackUserCache.put(member.profile.displayName, member.id);
+            }
           }
+          cursorPayload.cursor = userList.responseMetadata.nextCursor;
+        } catch (IOException e) {
+          LOG.error(e.getMessage(), e);
+          throw new SlackClientException("Error while reading Slack users list", e);
         }
-      } catch (IOException e) {
-        LOG.error(e.getMessage(), e);
-        throw new SlackClientException("Error while reading Slack users list", e);
-      }
+      } while (cursorPayload.cursor != "");
       id = slackUserCache.getIfPresent(key);
     }
     return id == null ? key : id;
