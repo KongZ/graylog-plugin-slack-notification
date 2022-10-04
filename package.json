@@ -1,6 +1,6 @@
 {
   "name": "graylog-plugin-slack-notification",
-  "version": "4.2.5",
+  "version": "4.3.7",
   "description": "Send notifications to Slack",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
     "graylog-web-plugin": "file:../graylog2-server/graylog2-web-interface/packages/graylog-web-plugin"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.12",
+    "@babel/core": "^7.19.3",
     "@babel/plugin-proposal-class-properties": "7.13.0",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-transform-runtime": "7.11.5",
@@ -26,7 +26,7 @@
     "@babel/preset-react": "7.12.13",
     "@testing-library/user-event": "^13.0.2",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^27.4.6",
+    "babel-jest": "^29.1.2",
     "babel-plugin-add-module-exports": "1.0.4",
     "babel-plugin-dynamic-import-node": "2.3.3",
     "babel-plugin-styled-components": "1.11.1",
