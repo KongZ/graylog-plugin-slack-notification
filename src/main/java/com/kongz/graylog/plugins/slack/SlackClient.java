@@ -14,9 +14,9 @@ import java.net.Proxy;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Charsets;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.Cache;
 import com.google.common.io.ByteStreams;
@@ -48,7 +48,7 @@ public class SlackClient {
     this.slackToken = configuration.token();
   }
 
-  private String postSlackApi(URL url, Object payload) throws SlackClientException {
+  private String postSlackApi(URL url, String jsonPayload) throws SlackClientException {
     HttpURLConnection conn = null;
     try {
       if (!StringUtils.isEmpty(proxyURL)) {
@@ -62,15 +62,14 @@ public class SlackClient {
       }
       conn.setDoOutput(true);
       conn.setRequestMethod("POST");
-      conn.setRequestProperty("Content-Type", "application/json");
+      conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
       if (!isNullOrEmpty(slackToken)) {
         conn.setRequestProperty("Authorization", "Bearer " + slackToken);
       }
     } catch (URISyntaxException | IOException e) {
       throw new SlackClientException("Could not open connection to Slack API", e);
     }
-    try (final Writer writer = new OutputStreamWriter(conn.getOutputStream(), Charsets.UTF_8)) {
-      String jsonPayload = objectMapper.writeValueAsString(payload);
+    try (final Writer writer = new OutputStreamWriter(conn.getOutputStream(), StandardCharsets.UTF_8)) {
       if (LOG.isTraceEnabled()) 
         LOG.trace("{}", jsonPayload);
       writer.write(jsonPayload);
@@ -81,9 +80,9 @@ public class SlackClient {
     // Parse response from Slack
     try (final InputStream responseStream = conn.getInputStream()) {
       final byte[] responseBytes = ByteStreams.toByteArray(responseStream);
-      String response = new String(responseBytes, Charsets.UTF_8);
-      LOG.debug("Received HTTP response body:\n{}", response);
+      String response = new String(responseBytes, StandardCharsets.UTF_8);
       int responseCode = conn.getResponseCode();
+      LOG.debug("[{}] Received HTTP response body:\n{}", responseCode, response);
       if (responseCode != 200) {
         throw new SlackClientException("Unexpected HTTP response status " + responseCode);
       }
@@ -102,10 +101,14 @@ public class SlackClient {
       SlackCursorPayload cursorPayload = new SlackCursorPayload(200, "");
       do {
         try {
-          String response = postSlackApi(new URL("https://slack.com/api/users.list"), cursorPayload);
+          StringBuilder uriBuilder = new StringBuilder("https://slack.com/api/users.list")
+            .append("?limit=").append(cursorPayload.limit);
+          if (!"".equals(cursorPayload.cursor))
+            uriBuilder = uriBuilder.append("&cursor=").append(cursorPayload.cursor);
+          String response = postSlackApi(new URL(uriBuilder.toString()), "");
           SlackUserList userList = objectMapper.readValue(response, SlackUserList.class);
           for (SlackMember member : userList.members) {
-            if (!member.isBot) {
+            if (Boolean.FALSE.equals(member.isBot)) {
               slackUserCache.put(member.profile.displayName, member.id);
             }
           }
@@ -114,7 +117,7 @@ public class SlackClient {
           LOG.error(e.getMessage(), e);
           throw new SlackClientException("Error while reading Slack users list", e);
         }
-      } while (cursorPayload.cursor != "");
+      } while (!"".equals(cursorPayload.cursor));
       id = slackUserCache.getIfPresent(key);
     }
     return id == null ? key : id;

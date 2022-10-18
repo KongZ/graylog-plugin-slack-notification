@@ -1,16 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
-import lodash from "lodash";
+import lodash from 'lodash';
 
 import { Input } from "components/bootstrap";
-import FormsUtils from "util/FormsUtils";
+import FormsUtils from 'util/FormsUtils';
 
-class SlackNotificationForm extends React.Component {
+
+class GraylogSlackNotificationForm extends React.Component {
   static propTypes = {
     config: PropTypes.object.isRequired,
     validation: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   static defaultConfig = {
     webhookUrl: "",
@@ -311,4 +317,4 @@ class SlackNotificationForm extends React.Component {
   }
 }
 
-export default SlackNotificationForm;
+export default GraylogSlackNotificationForm;

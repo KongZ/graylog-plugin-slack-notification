@@ -118,71 +118,74 @@ public abstract class SlackNotificationConfig implements EventNotificationConfig
 	@AutoValue.Builder
 	public static abstract class Builder implements EventNotificationConfig.Builder<SlackNotificationConfig.Builder> {
 		@JsonCreator
-		public static SlackNotificationConfig.Builder create() {
-			return new AutoValue_SlackNotificationConfig.Builder().type(TYPE_NAME);
+		public static Builder create() {
+			return new AutoValue_SlackNotificationConfig.Builder()
+				.type(TYPE_NAME);
 		}
 
 		@JsonProperty(FIELD_WEBHOOK_URL)
-		public abstract SlackNotificationConfig.Builder webhookUrl(String webhookUrl);
+		public abstract Builder webhookUrl(String webhookUrl);
 
 		@JsonProperty(FIELD_CHANNEL)
-		public abstract SlackNotificationConfig.Builder channel(String channel);
+		public abstract Builder channel(String channel);
 
 		@JsonProperty(FIELD_USER_NAME)
-		public abstract SlackNotificationConfig.Builder userName(String userName);
+		public abstract Builder userName(String userName);
 
 		@JsonProperty(FIELD_COLOR)
-		public abstract SlackNotificationConfig.Builder color(String color);
+		public abstract Builder color(String color);
 
 		@JsonProperty(FIELD_BACKLOG_ITEMS)
-		public abstract SlackNotificationConfig.Builder backlogItems(int backlogItems);
+		public abstract Builder backlogItems(int backlogItems);
 
 		@JsonProperty(FIELD_NOTIFY_USERS)
-		public abstract SlackNotificationConfig.Builder notifyUsers(String notifyUsers);
+		public abstract Builder notifyUsers(String notifyUsers);
 
 		@JsonProperty(FIELD_SHORT_MODE)
-		public abstract SlackNotificationConfig.Builder shortMode(boolean shortMode);
+		public abstract Builder shortMode(boolean shortMode);
 
 		@JsonProperty(FIELD_LINK_NAMES)
-		public abstract SlackNotificationConfig.Builder linkNames(boolean linkNames);
+		public abstract Builder linkNames(boolean linkNames);
 
 		@JsonProperty(FIELD_MESSAGE_ICON)
-		public abstract SlackNotificationConfig.Builder messageIcon(String messageIcon);
+		public abstract Builder messageIcon(String messageIcon);
 
 		@JsonProperty(FIELD_FOOTER_TEXT)
-		public abstract SlackNotificationConfig.Builder footerText(String footerText);
+		public abstract Builder footerText(String footerText);
 
 		@JsonProperty(FIELD_FOOTER_ICON_URL)
-		public abstract SlackNotificationConfig.Builder footerIconUrl(String footerIconUrl);
+		public abstract Builder footerIconUrl(String footerIconUrl);
 
 		@JsonProperty(FIELD_FOOTER_TS_FIELD)
-		public abstract SlackNotificationConfig.Builder footerTsField(String footerTsField);
+		public abstract Builder footerTsField(String footerTsField);
 
 		@JsonProperty(FIELD_GRAYLOG_URL)
-		public abstract SlackNotificationConfig.Builder graylogUrl(String graylogUrl);
+		public abstract Builder graylogUrl(String graylogUrl);
 
 		@JsonProperty(FIELD_PROXY_ADDRESS)
-		public abstract SlackNotificationConfig.Builder proxyAddress(String proxyAddress);
+		public abstract Builder proxyAddress(String proxyAddress);
 
 		@JsonProperty(FIELD_FIELDS)
-		public abstract SlackNotificationConfig.Builder fields(String fields);
+		public abstract Builder fields(String fields);
 
 		@JsonProperty(FIELD_ACKNOWLEDGE)
-		public abstract SlackNotificationConfig.Builder acknowledge(boolean acknowledge);
+		public abstract Builder acknowledge(boolean acknowledge);
 
 		@JsonProperty(FIELD_PREFORMAT)
-		public abstract SlackNotificationConfig.Builder preformat(boolean preformat);
+		public abstract Builder preformat(boolean preformat);
 
 		@JsonProperty(FIELD_TOKEN)
-		public abstract SlackNotificationConfig.Builder token(String token);
+		public abstract Builder token(String token);
 
-		abstract SlackNotificationConfig autoBuild();
+		public abstract SlackNotificationConfig build();
 
-		public SlackNotificationConfig build() {
-			// Make sure the type name is correct!
-			type(TYPE_NAME);
-			return autoBuild();
-		}
+		// abstract SlackNotificationConfig autoBuild();
+
+		// public SlackNotificationConfig build() {
+		// 	// Make sure the type name is correct!
+		// 	type(TYPE_NAME);
+		// 	return autoBuild();
+		// }
 	}
 
 	@Override
