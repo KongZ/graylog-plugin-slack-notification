@@ -53,6 +53,9 @@ public class SlackProfile {
    @JsonProperty("last_name")
    public String lastName;
 
+   @JsonProperty("email")
+   public String email;
+
    @JsonProperty("image_24")
    public String image24;
 

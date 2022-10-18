@@ -22,7 +22,7 @@ services:
       - ./data/es:/usr/share/elasticsearch/data
   # Graylog: https://hub.docker.com/r/graylog/graylog/
   graylog:
-    image: graylog/graylog:4.2
+    image: graylog/graylog:4.3.7
     environment:
       # CHANGE ME (must be at least 16 characters)!
       - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
@@ -39,7 +39,7 @@ services:
       - elasticsearch
     volumes:
       # Mount local plugin file into Docker container
-      - ./target/graylog-plugin-slack-notification-4.2.5.jar:/usr/share/graylog/plugin/graylog-plugin-slack-notification-4.2.5.jar
+      - ./target/graylog-plugin-slack-notification-4.3.7.jar:/usr/share/graylog/plugin/graylog-plugin-slack-notification-4.3.7.jar
     ports:
       # Graylog web interface and REST API
       - 9000:9000

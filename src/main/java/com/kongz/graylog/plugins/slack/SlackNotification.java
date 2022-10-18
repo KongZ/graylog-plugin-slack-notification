@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.floreysoft.jmte.Engine;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
@@ -251,7 +252,7 @@ public class SlackNotification implements EventNotification {
 				try {
 					if (notifyUsers.contains("@")) {
 						StringBuilder usersAsId = new StringBuilder();
-						String[] users = notifyUsers.split("@");
+						Iterable<String> users = Splitter.on('@').split(notifyUsers);
 						for (String user : users) {
 							user = user.trim();
 							if (!"".equals(user)) {

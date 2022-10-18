@@ -10,7 +10,9 @@ public class SlackNotificationPluginModule extends PluginModule {
          SlackNotificationConfig.TYPE_NAME, 
          SlackNotificationConfig.class, 
          SlackNotification.class,
-         SlackNotification.Factory.class);
+         SlackNotification.Factory.class,
+         SlackNotificationConfigEntity.TYPE_NAME,
+         SlackNotificationConfigEntity.class);
       addRestResource(SlackActionCallback.class);
    }
 }

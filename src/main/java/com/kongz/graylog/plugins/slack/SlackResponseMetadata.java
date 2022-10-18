@@ -1,21 +1,14 @@
 package com.kongz.graylog.plugins.slack;
 
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SlackUserList {
+public class SlackResponseMetadata {
 
-   @JsonProperty("ok")
-   public Boolean ok;
+   @JsonProperty("next_cursor")
+   public String nextCursor;
    
-   @JsonProperty("members")
-   public List<SlackMember> members = null;
-   
-   @JsonProperty("response_metadata")
-   public SlackResponseMetadata responseMetadata = null;
-
 }
