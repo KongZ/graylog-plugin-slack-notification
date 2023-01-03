@@ -14,7 +14,7 @@
 
     <groupId>com.kongz</groupId>
     <artifactId>graylog-plugin-slack-notification</artifactId>
-    <version>4.3.7</version>
+    <version>4.3.8</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>

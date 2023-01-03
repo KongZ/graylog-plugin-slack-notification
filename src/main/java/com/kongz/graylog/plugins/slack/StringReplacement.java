@@ -7,7 +7,11 @@ import java.util.Map;
  */
 public final class StringReplacement {
   private static final String DEFAULT_VALUE_DELIMITER = ":-";
-  /**
+  
+  private StringReplacement() {
+    throw new IllegalStateException("Utility class");
+  }
+    /**
    * Replaces all the occurrences of variables in the given source object with their matching values
    * from the map.
    *

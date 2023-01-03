@@ -86,13 +86,14 @@ public class SlackMessage {
     }
   }
 
-  public String getJsonString() throws JsonProcessingException {
+  public String getJsonString() {
     final Map<String, Object> params =
         new HashMap<String, Object>() {
           private static final long serialVersionUID = 5555331305145971889L;
           {
-            put("channel", channel);
             put("text", text);
+            put("channel", channel);
+            put("username", username);
             put("icon_url", iconUrl);
             put("icon_emoji", iconEmoji);
             put("link_names", linkNames);
@@ -114,8 +115,9 @@ public class SlackMessage {
         new HashMap<String, Object>() {
           private static final long serialVersionUID = 8683918581659326967L;
           {
-            put("channel", channel);
             put("text", text);
+            put("channel", channel);
+            put("username", username);
             put("icon_url", iconUrl);
             put("icon_emoji", iconEmoji);
             put("link_names", linkNames);
@@ -132,7 +134,7 @@ public class SlackMessage {
     }
     StringBuilder sb = new StringBuilder();
     try {
-      for (HashMap.Entry<String, Object> entry : params.entrySet()) {
+      for (Map.Entry<String, Object> entry : params.entrySet()) {
         Object value = entry.getValue();
         if (value != null) {
           if (sb.length() > 0) sb.append('&');
