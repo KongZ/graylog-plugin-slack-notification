@@ -134,11 +134,7 @@ public class SlackClient {
     } catch (MalformedURLException e) {
       throw new SlackClientException("Error while constructing webhook URL.", e);
     }
-    try {
-      postSlackApi(url, message.getJsonString());
-    } catch (IOException e) {
-      throw new SlackClientException("Error while sending message to Slack", e);
-    }
+    postSlackApi(url, message.getJsonString());
   }
 
   public static class SlackClientException extends Exception {

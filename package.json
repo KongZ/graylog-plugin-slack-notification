@@ -1,6 +1,6 @@
 {
   "name": "graylog-plugin-slack-notification",
-  "version": "4.3.7",
+  "version": "4.3.10",
   "description": "Send notifications to Slack",
   "repository": {
     "type": "git",

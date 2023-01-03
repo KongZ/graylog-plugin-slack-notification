@@ -143,14 +143,6 @@ public abstract class SlackNotificationConfigEntity implements EventNotification
 		public abstract Builder token(ValueReference token);
 
 		public abstract SlackNotificationConfigEntity build();
-
-		// abstract SlackNotificationConfigEntity autoBuild();
-
-		// public SlackNotificationConfigEntity build() {
-		// 	// Make sure the type name is correct!
-		// 	type(TYPE_NAME);
-		// 	return autoBuild();
-		// }
 	}
 
 	@Override

@@ -132,7 +132,7 @@ public class SlackNotification implements EventNotification {
 				Message backlogItem = backlogItems.get(i);
 				String footer = null;
 				Long ts = null;
-				Map<String, Object> fields = new HashMap<String, Object>();
+				Map<String, Object> fields = new HashMap<>();
 				fields.putAll(eventFields);
 				fields.putAll(backlogItem.getFields());
 				if (!isNullOrEmpty(footerText)) {
@@ -320,8 +320,7 @@ public class SlackNotification implements EventNotification {
 			backlog = backlog.stream().limit(backlogItemsCount).collect(Collectors.toList());
 		}
 		EventNotificationModelData modelData = EventNotificationModelData.of(ctx, backlog);
-		Map<String, Object> objectMap = objectMapper.convertValue(modelData, TypeReferences.MAP_STRING_OBJECT);
-		return objectMap;
+		return objectMapper.convertValue(modelData, TypeReferences.MAP_STRING_OBJECT);
   }
 
 }

@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -109,7 +110,7 @@ public class SlackActionCallback extends RestResource implements PluginRestResou
                 .setMarkdownIn("text");
             final StreamingOutput stream =
                 os -> {
-                  try (final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(os, "UTF-8");
+                  try (final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(os, StandardCharsets.UTF_8);
                       final Writer writer = new BufferedWriter(outputStreamWriter)) {
                     writer.append(message.getJsonString());
                     writer.flush();
@@ -120,12 +121,12 @@ public class SlackActionCallback extends RestResource implements PluginRestResou
         }
       }
     } catch (RuntimeException | IOException e) {
-      LOG.error("{}", e);
+      LOG.error("Error while receiving callback", e);
     }
     // If invalid request was sent or something wrong, we just response error message to user private text
     final StreamingOutput stream =
         os -> {
-          try (final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(os, "UTF-8");
+          try (final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(os, StandardCharsets.UTF_8);
               final Writer writer = new BufferedWriter(outputStreamWriter)) {
             writer.append(
                 "{\"response_type\": \"ephemeral\",\"replace_original\": false,\"text\": \"Sorry, that didn't work. Please try again.\"}");

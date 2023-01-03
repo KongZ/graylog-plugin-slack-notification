@@ -178,14 +178,6 @@ public abstract class SlackNotificationConfig implements EventNotificationConfig
 		public abstract Builder token(String token);
 
 		public abstract SlackNotificationConfig build();
-
-		// abstract SlackNotificationConfig autoBuild();
-
-		// public SlackNotificationConfig build() {
-		// 	// Make sure the type name is correct!
-		// 	type(TYPE_NAME);
-		// 	return autoBuild();
-		// }
 	}
 
 	@Override
