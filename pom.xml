@@ -8,13 +8,13 @@
     <parent>
         <groupId>org.graylog.plugins</groupId>
         <artifactId>graylog-plugin-web-parent</artifactId>
-        <version>4.3.10</version>
+        <version>5.0.7</version>
         <relativePath>../graylog2-server/graylog-plugin-parent/graylog-plugin-web-parent</relativePath>
     </parent>
 
     <groupId>com.kongz</groupId>
     <artifactId>graylog-plugin-slack-notification</artifactId>
-    <version>4.3.10</version>
+    <version>5.0.7</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
@@ -46,7 +46,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven.site.skip>true</maven.site.skip>
 
-        <graylog.version>4.3.10</graylog.version>
+        <graylog.version>5.0.0</graylog.version>
         <auto-value.version>1.6.2</auto-value.version>
         <generatedSources>${project.build.directory}/generated-sources/java</generatedSources>
     </properties>
@@ -125,16 +125,29 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>3.10.1</version>
                 <configuration>
-                    <compilerArgs>
-                        <arg>-proc:none</arg>
-                        <arg>-XepDisableWarningsInGeneratedCode</arg>
-                    </compilerArgs>
+                    <release>17</release>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                    <compilerId>javac-with-errorprone</compilerId>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
                     <annotationProcessors>
                         <annotationProcessor>com.google.auto.value.processor.AutoValueProcessor</annotationProcessor>
                     </annotationProcessors>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.plexus</groupId>
+                        <artifactId>plexus-compiler-javac-errorprone</artifactId>
+                        <version>2.11.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.errorprone</groupId>
+                        <artifactId>error_prone_core</artifactId>
+                        <version>2.13.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>com.mysema.maven</groupId>
