@@ -8,13 +8,13 @@
     <parent>
         <groupId>org.graylog.plugins</groupId>
         <artifactId>graylog-plugin-web-parent</artifactId>
-        <version>5.0.7</version>
+        <version>5.1.2</version>
         <relativePath>../graylog2-server/graylog-plugin-parent/graylog-plugin-web-parent</relativePath>
     </parent>
 
     <groupId>com.kongz</groupId>
     <artifactId>graylog-plugin-slack-notification</artifactId>
-    <version>5.0.7</version>
+    <version>5.1.2</version>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
@@ -46,7 +46,7 @@
         <maven.deploy.skip>true</maven.deploy.skip>
         <maven.site.skip>true</maven.site.skip>
 
-        <graylog.version>5.0.0</graylog.version>
+        <graylog.version>5.1.0</graylog.version>
         <auto-value.version>1.6.2</auto-value.version>
         <generatedSources>${project.build.directory}/generated-sources/java</generatedSources>
     </properties>
