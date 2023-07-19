@@ -301,7 +301,7 @@ public class SlackNotification implements EventNotification {
 		if (!baseUrl.endsWith("/")) {
 			builder.append('/');
 		}
-		return builder.append("streams/").append(stream.getId()).append("/messages?q=*&rangetype=relative&relative=3600")
+		return builder.append("streams/").append(stream.getId()).append("/search?q=&rangetype=relative&relative=3600")
 				.toString();
 	}
 
